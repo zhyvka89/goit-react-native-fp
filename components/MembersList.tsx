@@ -104,10 +104,17 @@ export default function MembersList({ navigation }: Props) {
         <Button title="Add New Member" onPress={() => setModalVisible(true)} />
       </View>
 
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Start Training Session"
+          onPress={() => navigation.navigate("TrainingSession")}
+        />
+      </View>
+
       <AddMemberModal
         visible={modalVisible}
         onClose={useCallback(() => setModalVisible(false), [])}
-        onAdd={useCallback((loadMembers), [loadMembers])}
+        onAdd={useCallback(loadMembers, [loadMembers])}
       />
       <Toast />
     </View>
