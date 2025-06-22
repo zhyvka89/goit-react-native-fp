@@ -20,7 +20,6 @@ export default function TrainingHistoryScreen() {
 
   const getTrainingHistory = async (): Promise<TrainingSession[]> => {
     const json = await AsyncStorage.getItem('trainingSessions');
-    // console.log('Training History:', json);
     return json ? JSON.parse(json) : [];
   };
 
@@ -28,11 +27,9 @@ export default function TrainingHistoryScreen() {
     // AsyncStorage.clear(); // Clear storage for testing purposes
     const loadHistory = async () => {
       const all = await getTrainingHistory();
-      console.log('All Training History:', all);
       const filtered = generation
         ? all.filter((s) => s.generationId.startsWith(generation.id))
         : all;
-      console.log('Filtered Training History:', filtered);
       setHistory(filtered);
     };
 
