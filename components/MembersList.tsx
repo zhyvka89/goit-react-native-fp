@@ -4,7 +4,7 @@ import { useThemeContext } from "@/contexts/ThemeContext";
 import { RootStackParamList } from "@/navigation/NativeStackNavigator";
 import { getThemeColors } from "@/utilities/theme";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import {
   Alert,
   Button,
@@ -37,6 +37,17 @@ export default function MembersList({ navigation }: Props) {
   useEffect(() => {
     loadMembers();
   }, []);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Button
+          title="History"
+          onPress={() => navigation.navigate("TrainingHistory")}
+        />
+      ),
+    });
+  }, [navigation]);
 
   const handleRemoveMember = useCallback((id: string, name: string) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -107,7 +118,7 @@ export default function MembersList({ navigation }: Props) {
       <View style={styles.buttonContainer}>
         <Button
           title="Start Training Session"
-          onPress={() => navigation.navigate("TrainingSession")}
+          onPress={() => navigation.navigate("TrainingSession", { members: members })}
         />
       </View>
 

@@ -14,11 +14,6 @@ import {
 } from 'react-native';
 import uuid from 'react-native-uuid';
 
-type Member = {
-  id: string;
-  name: string;
-};
-
 type TrainingSession = {
   id: string;
   date: string;
@@ -26,30 +21,25 @@ type TrainingSession = {
   attendees: string[];
 };
 
-const mockMembers: Member[] = [
-  { id: '1', name: 'John Doe' },
-  { id: '2', name: 'Alice Smith' },
-  { id: '3', name: 'Liam Johnson' },
-];
-
-export default function TrainingSessionScreen() {
+export default function TrainingSessionScreen({route}: { route: any }) {
+  const { members } = route.params;
   const [attendees, setAttendees] = useState<string[]>([]);
   const { generation } = useGeneration();
   const { theme } = useThemeContext();
   const colors = getThemeColors(theme);
 
-  const toggleAttendance = (memberId: string) => {
+  const toggleAttendance = (memberName: string) => {
     setAttendees(prev =>
-      prev.includes(memberId)
-        ? prev.filter(id => id !== memberId)
-        : [...prev, memberId]
+      prev.includes(memberName)
+        ? prev.filter(name => name !== memberName)
+        : [...prev, memberName]
     );
   };
 
   const handleSaveSession = async () => {
     const session: TrainingSession = {
       id: uuid.v4().toString(),
-      date: new Date().toISOString(),
+      date: new Date().toLocaleDateString(),
       generationId: generation?.id || '',
       attendees,
     };
@@ -71,14 +61,14 @@ export default function TrainingSessionScreen() {
       <Text style={[styles.title, { color: colors.text }]}>Mark Attendance</Text>
 
       <FlatList
-        data={mockMembers}
+        data={members}
         keyExtractor={item => item.id}
         renderItem={({ item }) => {
-          const isChecked = attendees.includes(item.id);
+          const isChecked = attendees.includes(item.name);
           return (
             <TouchableOpacity
               style={[styles.memberRow, { backgroundColor: isChecked ? '#d0f0c0' : '#fff' }]}
-              onPress={() => toggleAttendance(item.id)}
+              onPress={() => toggleAttendance(item.name)}
             >
               <Text style={{ color: colors.text }}>{item.name}</Text>
               <Text>{isChecked ? '✔️' : ''}</Text>
